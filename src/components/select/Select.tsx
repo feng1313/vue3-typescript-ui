@@ -1,5 +1,6 @@
 import {Vue, Options} from 'vue-class-component'
 import {Dropdown} from '../dropdown'
+import { renderSlot } from 'vue'
 
 const cssPrefix = 'v3'
 const css = {
@@ -20,7 +21,9 @@ export default class Select extends Vue {
           <div class={css.panelContext}></div>
           <div class={css.panelIcon}></div>
         </div>
-        <Dropdown v-slots={this.$slots}></Dropdown>
+        <Dropdown>
+          {renderSlot (this.$slots, 'default')}
+        </Dropdown>
       </div>
     )
   }

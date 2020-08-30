@@ -1,4 +1,5 @@
 import {Vue, Options} from 'vue-class-component'
+import { renderSlot } from 'vue'
 
 const css = 'v3-select-option'
 
@@ -8,7 +9,7 @@ const css = 'v3-select-option'
 export default class Option extends Vue {
   render () {
     return (
-      <div class={css}><slot></slot></div>
+      <div class={css}>{renderSlot (this.$slots, 'default')}</div>
     )
   }
 }

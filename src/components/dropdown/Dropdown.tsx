@@ -1,4 +1,5 @@
 import {Vue, Options} from 'vue-class-component'
+import { renderSlot } from 'vue'
 
 const cssPrefix = 'v3'
 const css = {
@@ -11,8 +12,8 @@ const css = {
 export default class Dropdown extends Vue {
   render () {
     return (
-      <div class={css.dropdown} v-slots={this.$slots}>
-        <slot></slot>
+      <div class={css.dropdown}>
+        {renderSlot (this.$slots, 'default')}
       </div>
     )
   }

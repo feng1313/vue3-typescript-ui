@@ -1,5 +1,5 @@
 import {Vue, Options} from 'vue-class-component'
-import { renderSlot } from 'vue'
+import {renderSlot} from 'vue'
 
 const cssPrefix = 'v3'
 const css = {
@@ -16,5 +16,12 @@ export default class Dropdown extends Vue {
         {renderSlot (this.$slots, 'default')}
       </div>
     )
+  }
+
+  mounted () {
+    this.$nextTick (() => {
+      // @ts-ignore
+      console.log (this.$on)
+    })
   }
 }

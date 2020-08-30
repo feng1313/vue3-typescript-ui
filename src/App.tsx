@@ -25,12 +25,13 @@ export default defineComponent ({
       ]
     }
   },
-
   render () {
+    console.log (this)
     return (
       <div>
         <Select>
-          {this.list.map (item => <Option>{item.name}</Option>)}
+          {/* @ts-ignore */}
+          {this.list.map (item => <Option onSelected={a => console.log (a)}>{item.name}</Option>)}
         </Select>
       </div>
     )

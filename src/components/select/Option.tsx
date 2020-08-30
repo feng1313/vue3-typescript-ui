@@ -12,14 +12,21 @@ export default class Option extends Vue {
 
   render () {
     return (
-      <div class={css} onClick={this.handlerClick}>{renderSlot (this.$slots, 'default')}</div>
+      <div class={css} onClick={this.clickHandler}>{renderSlot (this.$slots, 'default')}</div>
     )
   }
 
-  handlerClick () {
-    this.$emit ('selected', {
-      label: this.$el.textContext,
-      value: this.value
-    })
+  clickHandler() {
+    let parent = this.$parent
+    while (parent) {
+      if (parent.$options.name == 'V3-Select') {
+        parent.$emit.apply (parent, ['selected', {
+          label: (this.$el as Element).textContent,
+          value: this.value
+        }])
+        return
+      }
+      parent = parent.$parent
+    }
   }
 }

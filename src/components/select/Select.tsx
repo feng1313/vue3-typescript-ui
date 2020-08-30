@@ -13,7 +13,12 @@ const css = {
 }
 
 @Options ({
-  name: 'V3-Select'
+  name: 'V3-Select',
+  emits: {
+    selected ({label, value}) {
+      console.log (label, value)
+    }
+  }
 })
 export default class Select extends Vue {
   private actived: boolean = false
@@ -25,7 +30,7 @@ export default class Select extends Vue {
     ]
     return (
       <div class={className}>
-        <div class={css.panel} onClick={this.handlerClick}>
+        <div class={css.panel} onClick={this.clickHandler}>
           <div class={css.panelContext}></div>
           <div class={css.panelIcon}></div>
         </div>
@@ -47,19 +52,19 @@ export default class Select extends Vue {
     }
   }
 
-  handlerClick () {
+  clickHandler () {
     this.actived = true
   }
 
   registerGlobalClick () {
-    document.addEventListener ('click', this.handlerTrigger)
+    document.addEventListener ('click', this.triggerHandler)
   }
 
   clearGlobalClick () {
-    document.removeEventListener ('click', this.handlerTrigger)
+    document.removeEventListener ('click', this.triggerHandler)
   }
 
-  handlerTrigger (event: Event) {
+  triggerHandler (event: Event) {
     const targetEl = event.target as HTMLElement
     if (!this.isDescendant (this.$el, targetEl)) {
       this.actived = false

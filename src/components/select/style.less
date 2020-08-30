@@ -1,6 +1,7 @@
 @select-width: auto;
 @select-height: 25px;
 @select-line-height: 25px;
+@select-option-height: 25px;
 
 .@{select} {
   display: block;
@@ -33,6 +34,22 @@
   }
 
   & > .@{dropdown} {
-
+    display: none;
   }
+}
+
+.@{select}-actived {
+  & > .@{dropdown} {
+    display: block;
+  }
+}
+
+.@{select}-option {
+  height: @select-option-height;
+  line-height: @select-option-height;
+}
+
+.@{select}-option-selected {
+  background: #000;
+  color:#fff;
 }

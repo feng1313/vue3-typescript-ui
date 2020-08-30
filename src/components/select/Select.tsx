@@ -1,10 +1,12 @@
 import {Vue, Options} from 'vue-class-component'
 import {Dropdown} from '../dropdown'
-import { renderSlot } from 'vue'
+import {renderSlot} from 'vue'
+import {Watch} from 'vue-property-decorator'
 
 const cssPrefix = 'v3'
 const css = {
   select: `${cssPrefix}-select`,
+  actived: `${cssPrefix}-select-actived`,
   panel: `${cssPrefix}-select-panel`,
   panelContext: `${cssPrefix}-select-panel-context`,
   panelIcon: `${cssPrefix}-select-panel-icon`
@@ -14,10 +16,16 @@ const css = {
   name: 'V3-Select'
 })
 export default class Select extends Vue {
+  private actived: boolean = false
+
   render () {
+    const className = [
+      css.select,
+      this.actived ? css.actived : null
+    ]
     return (
-      <div class={css.select}>
-        <div class={css.panel}>
+      <div class={className}>
+        <div class={css.panel} onClick={this.handlerClick}>
           <div class={css.panelContext}></div>
           <div class={css.panelIcon}></div>
         </div>
@@ -28,9 +36,44 @@ export default class Select extends Vue {
     )
   }
 
-  mounted () {
-    this.$nextTick (() => {
-      console.log (this.$slots)
-    })
+  @Watch ('actived')
+  activedChange (actived: boolean) {
+    if (actived) {
+      this.$emit ('focus')
+      this.registerGlobalClick ()
+    } else {
+      this.$emit ('blur')
+      this.clearGlobalClick ()
+    }
+  }
+
+  handlerClick () {
+    this.actived = true
+  }
+
+  registerGlobalClick () {
+    document.addEventListener ('click', this.handlerTrigger)
+  }
+
+  clearGlobalClick () {
+    document.removeEventListener ('click', this.handlerTrigger)
+  }
+
+  handlerTrigger (event: Event) {
+    const targetEl = event.target as HTMLElement
+    if (!this.isDescendant (this.$el, targetEl)) {
+      this.actived = false
+    }
+  }
+
+  isDescendant (parent: Element, child: Element) {
+    var node = child.parentNode
+    while ( node != null ) {
+      if ( node == parent )
+        return true
+
+      node = node.parentNode
+    }
+    return false
   }
 }

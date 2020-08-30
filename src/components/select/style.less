@@ -1,0 +1,38 @@
+@select-width: auto;
+@select-height: 25px;
+@select-line-height: 25px;
+
+.@{select} {
+  display: block;
+  box-sizing: border-box;
+  border: solid 1px @border-color;
+  cursor: pointer;
+  position: relative;
+
+  &,
+  & > &-panel,
+  & > &-panel > &-panel-context {
+    width: @select-width;
+    height: @select-height;
+    line-height: @select-line-height;
+  }
+
+  &-panel{
+    position: relative;
+    &-context {
+      padding-right: 25px;
+    }
+    &-icon {
+      position: absolute;
+      height: @select-height;
+      width: 25px;
+      right:0px;
+      top:0px;
+      background: #000;
+    }
+  }
+
+  & > .@{dropdown} {
+
+  }
+}

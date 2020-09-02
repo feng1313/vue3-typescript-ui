@@ -41,15 +41,18 @@
 .@{select}-actived {
   & > .@{dropdown} {
     display: block;
+    z-index: @max-z-index;
   }
 }
 
 .@{select}-option {
   height: @select-option-height;
   line-height: @select-option-height;
+  &:hover {
+    background: @hover-background-color;
+  }
 }
 
 .@{select}-option-selected {
-  background: #000;
-  color:#fff;
+  background: @selected-background-color;
 }

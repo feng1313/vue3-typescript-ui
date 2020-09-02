@@ -17,11 +17,4 @@ export default class Dropdown extends Vue {
       </div>
     )
   }
-
-  mounted () {
-    this.$nextTick (() => {
-      // @ts-ignore
-      console.log (this.$on)
-    })
-  }
 }

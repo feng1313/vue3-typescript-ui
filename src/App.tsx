@@ -1,5 +1,5 @@
 import {defineComponent} from 'vue'
-import {Select, Option} from '@/components/select'
+import {Select, Option} from '@/components'
 import '@/components/style/index.less'
 
 export default defineComponent ({
@@ -29,6 +29,14 @@ export default defineComponent ({
     console.log (this)
     return (
       <div>
+        <Select>
+          {/* @ts-ignore */}
+          {this.list.map (item => <Option onSelected={a => console.log (a)}>{item.name}</Option>)}
+        </Select>
+        <Select>
+          {/* @ts-ignore */}
+          {this.list.map (item => <Option onSelected={a => console.log (a)}>{item.name}</Option>)}
+        </Select>
         <Select>
           {/* @ts-ignore */}
           {this.list.map (item => <Option onSelected={a => console.log (a)}>{item.name}</Option>)}

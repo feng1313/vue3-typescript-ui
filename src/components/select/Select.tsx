@@ -1,7 +1,10 @@
 import {Vue, Options} from 'vue-class-component'
 import {Dropdown} from '../dropdown'
 import {renderSlot} from 'vue'
-import {Watch} from 'vue-property-decorator'
+import {Watch, Prop} from 'vue-property-decorator'
+import mitt, {Emitter} from 'mitt'
+import {EmitterType, OptionModel, OptionValue} from './Types'
+import {SelectName} from './Constants'
 
 const cssPrefix = 'v3'
 const css = {
@@ -13,15 +16,17 @@ const css = {
 }
 
 @Options ({
-  name: 'V3-Select',
-  emits: {
-    selected ({label, value}) {
-      console.log (label, value)
-    }
-  }
+  name: SelectName,
+  emits: ['change', 'blur', 'focus']
 })
 export default class Select extends Vue {
-  private actived: boolean = false
+  @Prop ({type: [String, Number]}) placeholder: string | number = '请选择'
+
+  private actived: Boolean = false
+  public emitter: Emitter = mitt ()
+  private optionModelList: Array<OptionModel> = []
+  private selectedOptionModelList: Array<OptionModel> = []
+  private panelText: string | number | null = ''
 
   render () {
     const className = [
@@ -31,7 +36,9 @@ export default class Select extends Vue {
     return (
       <div class={className}>
         <div class={css.panel} onClick={this.clickHandler}>
-          <div class={css.panelContext}></div>
+          <div class={css.panelContext}>
+            <div>{this.placeholder}{this.panelText}</div>
+          </div>
           <div class={css.panelIcon}></div>
         </div>
         <Dropdown>
@@ -50,6 +57,38 @@ export default class Select extends Vue {
       this.$emit ('blur')
       this.clearGlobalClick ()
     }
+  }
+
+  @Watch ('selectedOptionModelList')
+  selectOptionModelListChange (list: Array<OptionModel>) {
+    if (list.length <= 0)
+      return
+    this.placeholder = ''
+    this.panelText = list[0].label
+  }
+
+  beforeMount () {
+    this.emitter.on (EmitterType.Register, this.registerHandler)
+  }
+
+  registerHandler<T extends OptionModel> (optionModel: T) {
+    this.optionModelList.push (optionModel)
+  }
+
+  mounted () {
+    this.$nextTick (() => this.emitter.on (EmitterType.Selected, this.selectedHandler))
+  }
+
+  selectedHandler<T extends OptionModel> (optionModel: T) {
+    const {label, value} = optionModel
+    this.$emit ('change', {
+      label,
+      value
+    } as OptionValue)
+    this.actived = false
+    this.optionModelList.forEach (optionModel => optionModel.selected = false)
+    optionModel.selected = true
+    this.selectedOptionModelList = [optionModel]
   }
 
   clickHandler () {

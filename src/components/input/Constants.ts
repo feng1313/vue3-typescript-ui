@@ -1,0 +1,1 @@
+export const InputName = 'V3-Input'

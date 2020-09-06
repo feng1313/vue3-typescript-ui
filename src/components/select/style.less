@@ -1,21 +1,21 @@
 @select-width: auto;
-@select-height: 25px;
-@select-line-height: 25px;
-@select-option-height: 25px;
+@select-height: @basic-height;
+@select-line-height: @basic-height;
+@select-option-height: @basic-height;
 
 .@{select} {
   display: block;
   box-sizing: border-box;
-  border: solid 1px @border-color;
   cursor: pointer;
   position: relative;
+  transition: all .3s cubic-bezier(.645,.045,.355,1);
+
+  .hover();
 
   &,
   & > &-panel,
   & > &-panel > &-panel-context {
     width: @select-width;
-    height: @select-height;
-    line-height: @select-line-height;
   }
 
   &-panel{
@@ -25,11 +25,8 @@
     }
     &-icon {
       position: absolute;
-      height: @select-height;
-      width: 25px;
       right:0px;
       top:0px;
-      background: #000;
     }
   }
 
@@ -39,6 +36,7 @@
 }
 
 .@{select}-actived {
+  .focused();
   & > .@{dropdown} {
     display: block;
     z-index: @max-z-index;
@@ -48,11 +46,14 @@
 .@{select}-option {
   height: @select-option-height;
   line-height: @select-option-height;
+  transition: background 0.3s ease;
+  padding: 0 10px;
   &:hover {
-    background: @hover-background-color;
+    background-color: @option-hover-bg-color;
   }
 }
 
 .@{select}-option-selected {
-  background: @selected-background-color;
+  font-weight: 600;
+  background: @option-selected-bg-color;
 }

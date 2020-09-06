@@ -11,6 +11,11 @@
   transition: all .3s cubic-bezier(.645,.045,.355,1);
 
   .hover();
+  &:hover {
+    .@{select}-panel-icon {
+      color: @input-hover-border-color;
+    }
+  }
 
   &,
   & > &-panel,
@@ -25,8 +30,19 @@
     }
     &-icon {
       position: absolute;
+      font-size: 12px;
       right:0px;
-      top:0px;
+      top:50%;
+      height: 12px;
+      margin-top: -6px;
+      color: @border-color;
+      transition: all .25s linear;
+    }
+    .@{icon}-arrow {
+      transform: rotate(-90deg) scale(.85);
+    }
+    .@{icon}-loading {
+      .v3-anim-rotation();
     }
   }
 
@@ -41,6 +57,12 @@
     display: block;
     z-index: @max-z-index;
   }
+  .@{select}-panel-icon {
+    color: @input-hover-border-color;
+  }
+  .@{icon}-arrow {
+    transform: rotate(90deg);
+  }
 }
 
 .@{select}-option {
@@ -54,6 +76,18 @@
 }
 
 .@{select}-option-selected {
+  font-size: 12px;
   font-weight: 600;
   background: @option-selected-bg-color;
+  &-icon {
+    .v3-iconfont();
+    font-size: @font-size;
+    &::before {
+      display: block;
+      float: right;
+      color: @input-hover-border-color;
+      font-size: 16px;
+    }
+    clear: both;
+  }
 }

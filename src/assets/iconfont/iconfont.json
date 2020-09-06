@@ -1,0 +1,93 @@
+{
+  "id": "2048815",
+  "name": "v3-ui",
+  "font_family": "iconfont",
+  "css_prefix_text": "v3-icon-",
+  "description": "v3",
+  "glyphs": [
+    {
+      "icon_id": "16995474",
+      "name": "-v3-check-2",
+      "font_class": "check",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "16995475",
+      "name": "-v3-loading",
+      "font_class": "loading",
+      "unicode": "e629",
+      "unicode_decimal": 58921
+    },
+    {
+      "icon_id": "7737234",
+      "name": "13circle-close",
+      "font_class": "close-full",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "7737238",
+      "name": "14circle-close-outli",
+      "font_class": "close-line",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "7737250",
+      "name": "31arrow-left",
+      "font_class": "arrow",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "7737282",
+      "name": "61zoom",
+      "font_class": "zoom",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "7737474",
+      "name": "2info-outline",
+      "font_class": "info-line",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "7737475",
+      "name": "1info",
+      "font_class": "info-full",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "7737476",
+      "name": "5question",
+      "font_class": "question-full",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
+      "icon_id": "7737481",
+      "name": "11circle-check",
+      "font_class": "check-full",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "7737485",
+      "name": "6question-outline",
+      "font_class": "question-line",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "7737486",
+      "name": "12circle-check-outli",
+      "font_class": "check-line",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    }
+  ]
+}

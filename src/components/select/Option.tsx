@@ -5,6 +5,7 @@ import {Select} from '.'
 import {OptionModel, EmitterType} from './Types'
 import {SelectName, OptionName} from './Constants'
 
+const cssPrefix = 'v3'
 const css = 'v3-select-option'
 
 @Options ({
@@ -12,6 +13,7 @@ const css = 'v3-select-option'
 })
 export default class Option extends Vue {
   @Prop () value!: String | Number
+  @Prop ({type:[Boolean], default: true}) showCheckedIcon: boolean = true
 
   private selected: boolean = false
 
@@ -30,9 +32,12 @@ export default class Option extends Vue {
   }
 
   render () {
+    // console.log (this.selected, this.showCheckedIcon)
     const cls = [
       css,
-      this.selected ? `${css}-selected` : null
+      this.selected ? `${css}-selected` : null,
+      this.selected && this.showCheckedIcon ? 
+        [`${css}-selected-icon`, `${cssPrefix}-icon-check`] : null
     ]
     return (
       <div class={cls} onClick={this.clickHandler}>{renderSlot (this.$slots, 'default')}</div>
@@ -41,7 +46,7 @@ export default class Option extends Vue {
 
   @Watch ('selected')
   selectedChangeHandler (selected: boolean) {
-    console.log (selected)
+    // console.log (selected)
   }
 
   getParent (): Select | null {
@@ -59,7 +64,6 @@ export default class Option extends Vue {
     const parent = this.getParent ()
     if (!parent) 
       return
-
     parent.emitter.emit (type, optionModel)
   }
 

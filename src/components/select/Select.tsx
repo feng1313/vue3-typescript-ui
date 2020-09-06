@@ -1,10 +1,19 @@
-import {Vue, Options} from 'vue-class-component'
+import {Options} from 'vue-class-component'
 import {Dropdown} from '../dropdown'
 import {renderSlot} from 'vue'
-import {Watch, Prop} from 'vue-property-decorator'
+import {Watch, Prop, Mixins} from 'vue-property-decorator'
 import mitt, {Emitter} from 'mitt'
 import {EmitterType, OptionModel, OptionValue} from './Types'
 import {SelectName} from './Constants'
+import {Icon} from '../icon'
+import TriggerMixinHandler from '../mixins/TriggerMixinHandler'
+
+export enum IconType {
+  ARROW = 'arrow',
+  SEARCH = 'search',
+  LOADING = 'loading',
+  CLEAR = 'clear'
+}
 
 const cssPrefix = 'v3'
 const css = {
@@ -14,15 +23,20 @@ const css = {
   panelContext: `${cssPrefix}-select-panel-context`,
   panelIcon: `${cssPrefix}-select-panel-icon`
 }
+const iconTypeMap = {
+  [IconType.ARROW]: [`${cssPrefix}-icon-arrow`],
+  [IconType.SEARCH]: [`${cssPrefix}-icon-zoom`],
+  [IconType.LOADING]: [`${cssPrefix}-icon-loading`],
+  [IconType.CLEAR]: [`${cssPrefix}-icon-close-full`]
+}
 
 @Options ({
-  name: SelectName,
-  emits: ['change', 'blur', 'focus']
+  name: SelectName
 })
-export default class Select extends Vue {
+export default class Select extends Mixins (TriggerMixinHandler){
   @Prop ({type: [String, Number]}) placeholder: string | number = '请选择'
+  @Prop ({type: [String]}) icon: IconType = IconType.ARROW
 
-  private actived: Boolean = false
   public emitter: Emitter = mitt ()
   private optionModelList: Array<OptionModel> = []
   private selectedOptionModelList: Array<OptionModel> = []
@@ -33,13 +47,14 @@ export default class Select extends Vue {
       css.select,
       this.actived ? css.actived : null
     ]
+    let iconClass = [css.panelIcon].concat (iconTypeMap[this.icon])
     return (
       <div class={className}>
         <div class={css.panel} onClick={this.clickHandler}>
           <div class={css.panelContext}>
             <div>{this.placeholder}{this.panelText}</div>
           </div>
-          <div class={css.panelIcon}></div>
+          <Icon class={iconClass} />
         </div>
         <Dropdown>
           {renderSlot (this.$slots, 'default')}
@@ -89,35 +104,5 @@ export default class Select extends Vue {
     this.optionModelList.forEach (optionModel => optionModel.selected = false)
     optionModel.selected = true
     this.selectedOptionModelList = [optionModel]
-  }
-
-  clickHandler () {
-    this.actived = true
-  }
-
-  registerGlobalClick () {
-    document.addEventListener ('click', this.triggerHandler)
-  }
-
-  clearGlobalClick () {
-    document.removeEventListener ('click', this.triggerHandler)
-  }
-
-  triggerHandler (event: Event) {
-    const targetEl = event.target as HTMLElement
-    if (!this.isDescendant (this.$el, targetEl)) {
-      this.actived = false
-    }
-  }
-
-  isDescendant (parent: Element, child: Element) {
-    var node = child.parentNode
-    while ( node != null ) {
-      if ( node == parent )
-        return true
-
-      node = node.parentNode
-    }
-    return false
   }
 }

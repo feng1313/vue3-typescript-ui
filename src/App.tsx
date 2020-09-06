@@ -1,6 +1,7 @@
 import {defineComponent} from 'vue'
-import {Select, Option, Input} from '@/components'
+import {Select, Option, Input, Icon} from '@/components'
 import '@/components/style/index.less'
+import { IconType } from './components/select/Select'
 
 export default defineComponent ({
   data () {
@@ -29,12 +30,17 @@ export default defineComponent ({
     console.log (this)
     return (
       <div>
-        <Select>
+        <Select icon={IconType.SEARCH}>
           {/* @ts-ignore */}
           {this.list.map (item => <Option onSelected={a => console.log (a)}>{item.name}</Option>)}
         </Select>
         <br />
-        <Select>
+        <Select icon={IconType.LOADING}>
+          {/* @ts-ignore */}
+          {this.list.map (item => <Option onSelected={a => console.log (a)}>{item.name}</Option>)}
+        </Select>
+        <br />
+        <Select icon={IconType.CLEAR}>
           {/* @ts-ignore */}
           {this.list.map (item => <Option onSelected={a => console.log (a)}>{item.name}</Option>)}
         </Select>
@@ -45,6 +51,8 @@ export default defineComponent ({
         </Select>
         <br />
         <Input />
+        <br />
+        <Icon class='v3-icon-arrow' />
       </div>
     )
   }

@@ -1,7 +1,6 @@
 import {defineComponent} from 'vue'
-import {Select, Option, Input, Icon} from '@/components'
+import {Select, Option, Input, Icon, IconType, SelectMode} from '@/components'
 import '@/components/style/index.less'
-import { IconType } from './components/select/Select'
 
 export default defineComponent ({
   data () {
@@ -30,22 +29,22 @@ export default defineComponent ({
     console.log (this)
     return (
       <div>
-        <Select icon={IconType.SEARCH}>
+        <Select icon={IconType.Search}>
           {/* @ts-ignore */}
           {this.list.map (item => <Option onSelected={a => console.log (a)}>{item.name}</Option>)}
         </Select>
         <br />
-        <Select icon={IconType.LOADING}>
+        <Select icon={IconType.Loading} mode={SelectMode.Multiple}>
           {/* @ts-ignore */}
           {this.list.map (item => <Option onSelected={a => console.log (a)}>{item.name}</Option>)}
         </Select>
         <br />
-        <Select icon={IconType.CLEAR}>
+        <Select icon={IconType.Clear} mode={SelectMode.Multiple | SelectMode.Search}>
           {/* @ts-ignore */}
           {this.list.map (item => <Option onSelected={a => console.log (a)}>{item.name}</Option>)}
         </Select>
         <br />
-        <Select>
+        <Select mode={SelectMode.Multiple | SelectMode.Search | SelectMode.Clear}>
           {/* @ts-ignore */}
           {this.list.map (item => <Option onSelected={a => console.log (a)}>{item.name}</Option>)}
         </Select>

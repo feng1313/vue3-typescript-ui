@@ -3,39 +3,28 @@ import {Dropdown} from '../dropdown'
 import {renderSlot} from 'vue'
 import {Watch, Prop, Mixins} from 'vue-property-decorator'
 import mitt, {Emitter} from 'mitt'
-import {EmitterType, OptionModel, OptionValue} from './Types'
-import {SelectName} from './Constants'
-import {Icon} from '../icon'
+import {SelectName, EmitterType, OptionModel, OptionValue, SelectMode} from './Constants'
+import {Icon, IconType, IconTypeMap} from '../icon'
 import TriggerMixinHandler from '../mixins/TriggerMixinHandler'
 
-export enum IconType {
-  ARROW = 'arrow',
-  SEARCH = 'search',
-  LOADING = 'loading',
-  CLEAR = 'clear'
-}
-
+//#region style
 const cssPrefix = 'v3'
-const css = {
+export const css = {
   select: `${cssPrefix}-select`,
   actived: `${cssPrefix}-select-actived`,
   panel: `${cssPrefix}-select-panel`,
   panelContext: `${cssPrefix}-select-panel-context`,
   panelIcon: `${cssPrefix}-select-panel-icon`
 }
-const iconTypeMap = {
-  [IconType.ARROW]: [`${cssPrefix}-icon-arrow`],
-  [IconType.SEARCH]: [`${cssPrefix}-icon-zoom`],
-  [IconType.LOADING]: [`${cssPrefix}-icon-loading`],
-  [IconType.CLEAR]: [`${cssPrefix}-icon-close-full`]
-}
+//#endregion
 
 @Options ({
   name: SelectName
 })
 export default class Select extends Mixins (TriggerMixinHandler){
   @Prop ({type: [String, Number]}) placeholder: string | number = '请选择'
-  @Prop ({type: [String]}) icon: IconType = IconType.ARROW
+  @Prop ({type: [String]}) icon: string = IconType.Arrow
+  @Prop ({type: [Number], default: SelectMode.Single}) mode: SelectMode = SelectMode.Single
 
   public emitter: Emitter = mitt ()
   private optionModelList: Array<OptionModel> = []
@@ -47,7 +36,7 @@ export default class Select extends Mixins (TriggerMixinHandler){
       css.select,
       this.actived ? css.actived : null
     ]
-    let iconClass = [css.panelIcon].concat (iconTypeMap[this.icon])
+    let iconClass = [css.panelIcon].concat (IconTypeMap[this.icon])
     return (
       <div class={className}>
         <div class={css.panel} onClick={this.clickHandler}>
@@ -61,6 +50,10 @@ export default class Select extends Mixins (TriggerMixinHandler){
         </Dropdown>
       </div>
     )
+  }
+
+  isMultiple (): boolean {
+    return false
   }
 
   @Watch ('actived')
@@ -92,6 +85,7 @@ export default class Select extends Mixins (TriggerMixinHandler){
 
   mounted () {
     this.$nextTick (() => this.emitter.on (EmitterType.Selected, this.selectedHandler))
+    console.log (this.mode)
   }
 
   selectedHandler<T extends OptionModel> (optionModel: T) {

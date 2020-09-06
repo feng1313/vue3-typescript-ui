@@ -2,9 +2,22 @@ import {Vue, Options} from 'vue-class-component'
 import {renderSlot} from 'vue'
 import {Prop} from 'vue-property-decorator'
 
+const cssPrefix = 'v3'
 export const IconName = 'V3-Icon'
 export interface IconProp {
   class: string | Array<String>
+}
+export const IconType = {
+  Arrow: 'arrow',
+  Search: 'search',
+  Loading: 'loading',
+  Clear: 'clear'
+}
+export const IconTypeMap = {
+  [IconType.Arrow]: [`${cssPrefix}-icon-arrow`],
+  [IconType.Search]: [`${cssPrefix}-icon-zoom`],
+  [IconType.Loading]: [`${cssPrefix}-icon-loading`],
+  [IconType.Clear]: [`${cssPrefix}-icon-close-full`]
 }
 
 @Options ({

@@ -2,8 +2,7 @@ import {Vue, Options} from 'vue-class-component'
 import {renderSlot} from 'vue'
 import {Prop, Watch} from 'vue-property-decorator'
 import {Select} from '.'
-import {OptionModel, EmitterType} from './Types'
-import {SelectName, OptionName} from './Constants'
+import {SelectName, OptionName, OptionModel, EmitterType} from './Constants'
 
 const cssPrefix = 'v3'
 const css = 'v3-select-option'
@@ -32,7 +31,6 @@ export default class Option extends Vue {
   }
 
   render () {
-    // console.log (this.selected, this.showCheckedIcon)
     const cls = [
       css,
       this.selected ? `${css}-selected` : null,

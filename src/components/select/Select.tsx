@@ -18,13 +18,17 @@ export const css = {
 }
 //#endregion
 
+type ModelValueType = string | number | boolean | Array<string | number | boolean> | null
+
 @Options ({
-  name: SelectName
+  name: SelectName,
+  emits: ['update:modelValue']
 })
 export default class Select extends Mixins (TriggerMixinHandler){
   @Prop ({type: [String, Number]}) placeholder: string | number = '请选择'
   @Prop ({type: [String]}) icon: string = IconType.Arrow
   @Prop ({type: [Number], default: SelectMode.Single}) mode: SelectMode = SelectMode.Single
+  @Prop ({type: [String, Number, Array], default: null}) modelValue!: ModelValueType
 
   public emitter: Emitter = mitt ()
   private optionModelList: Array<OptionModel> = []
@@ -52,10 +56,6 @@ export default class Select extends Mixins (TriggerMixinHandler){
     )
   }
 
-  isMultiple (): boolean {
-    return false
-  }
-
   @Watch ('actived')
   activedChange (actived: boolean) {
     if (actived) {
@@ -68,11 +68,47 @@ export default class Select extends Mixins (TriggerMixinHandler){
   }
 
   @Watch ('selectedOptionModelList')
-  selectOptionModelListChange (list: Array<OptionModel>) {
-    if (list.length <= 0)
+  selectOptionModelListChange (selectedOptionModelList: Array<OptionModel>) {
+    if (selectedOptionModelList.length <= 0) {
       return
+    }
     this.placeholder = ''
-    this.panelText = list[0].label
+    this.panelText = selectedOptionModelList.map (item => item.label).join (',')
+  }
+
+  @Watch ('modelValue')
+  modelValueChange (modelValue: ModelValueType) {
+    if (this.optionModelList.length <= 0 || modelValue === null) {
+      return
+    }
+
+    // single mode
+    if (this.hasMode (SelectMode.Single)) {
+      if (Array.isArray (modelValue)) {
+        return
+      }
+      const optionModel = this.optionModelList.find (
+        item => item.value.toString () === modelValue.toString ()
+      )
+      console.log ('single mode mdelValue changed', optionModel)
+      this.selectedHandler (optionModel)
+    }
+
+    // multiple mode
+    if (this.hasMode (SelectMode.Multiple)) {
+      if (!Array.isArray (modelValue)) {
+        return
+      }
+      const optionModelList = this.optionModelList.filter (
+        item => modelValue.find (val => val.toString() === item.value.toString ())
+      )
+      console.log ('multiple mode modelValue changed', optionModelList)
+      this.selectedHandler (optionModelList)
+    }
+  }
+
+  hasMode (mode: SelectMode): boolean {
+    return Boolean (this.mode & mode)
   }
 
   beforeMount () {
@@ -84,19 +120,38 @@ export default class Select extends Mixins (TriggerMixinHandler){
   }
 
   mounted () {
-    this.$nextTick (() => this.emitter.on (EmitterType.Selected, this.selectedHandler))
-    console.log (this.mode)
+    this.$nextTick (() => {
+      this.emitter.on (EmitterType.Selected, this.selectedHandler)
+      if (this.modelValue !== null) {
+        this.modelValueChange (this.modelValue)
+      }
+    })
   }
 
-  selectedHandler<T extends OptionModel> (optionModel: T) {
-    const {label, value} = optionModel
-    this.$emit ('change', {
-      label,
-      value
-    } as OptionValue)
-    this.actived = false
+  selectedHandler<T extends OptionModel> (optionModel: T | T[] | undefined) {
+    if (typeof optionModel === 'undefined') {
+      return
+    }
+
     this.optionModelList.forEach (optionModel => optionModel.selected = false)
-    optionModel.selected = true
-    this.selectedOptionModelList = [optionModel]
+
+    if (this.hasMode (SelectMode.Single) && !Array.isArray (optionModel)) {
+      const {label, value} = optionModel
+      this.$emit ('change', {
+        label,
+        value
+      } as OptionValue)
+      this.actived = false
+      optionModel.selected = true
+      this.$emit ('update:modelValue', value)
+      this.selectedOptionModelList = [optionModel]
+    }
+
+    if (this.hasMode (SelectMode.Multiple) && Array.isArray (optionModel)) {
+      // this.$emit ('change', optionModel)
+      // this.$emit ('update:modelValue', optionModel.map (item => item.value))
+      this.selectedOptionModelList = optionModel
+      this.selectedOptionModelList.forEach (item => item.selected = true)
+    }
   }
 }

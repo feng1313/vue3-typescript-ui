@@ -5,6 +5,9 @@ import '@/components/style/index.less'
 export default defineComponent ({
   data () {
     return {
+      bindId: 8,
+      bindIds: [7,2,5,6],
+      checked: true,
       list: [
         {name: 'aaa', id: 1},
         {name: 'bbb', id: 2},
@@ -26,17 +29,22 @@ export default defineComponent ({
     }
   },
   render () {
-    console.log (this)
+    const x = [1,2,3,4]
+    console.log (x, 
+      new Proxy (x, {
+        
+      })
+    )
     return (
       <div>
-        <Select icon={IconType.Search}>
+        <Select icon={IconType.Search} v-model={this.bindId}>
           {/* @ts-ignore */}
-          {this.list.map (item => <Option onSelected={a => console.log (a)}>{item.name}</Option>)}
+          {this.list.map (item => <Option value={item.id} onSelected={a => console.log (a)}>{item.name}</Option>)}
         </Select>
         <br />
-        <Select icon={IconType.Loading} mode={SelectMode.Multiple}>
+        <Select icon={IconType.Loading} mode={SelectMode.Multiple} v-model={this.bindIds}>
           {/* @ts-ignore */}
-          {this.list.map (item => <Option onSelected={a => console.log (a)}>{item.name}</Option>)}
+          {this.list.map (item => <Option value={item.id} onSelected={a => console.log (a)}>{item.name}</Option>)}
         </Select>
         <br />
         <Select icon={IconType.Clear} mode={SelectMode.Multiple | SelectMode.Search}>
@@ -52,6 +60,12 @@ export default defineComponent ({
         <Input />
         <br />
         <Icon class='v3-icon-arrow' />
+        <br />
+        <input type="checkbox" id="checkbox" v-model={this.checked} />
+        <div>111{this.checked ? 'true' : 'false'}111</div>
+        <div>
+          <input v-model={this.bindId} />
+        </div>
       </div>
     )
   }

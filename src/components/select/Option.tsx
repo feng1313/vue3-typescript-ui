@@ -42,11 +42,6 @@ export default class Option extends Vue {
     )
   }
 
-  @Watch ('selected')
-  selectedChangeHandler (selected: boolean) {
-    // console.log (selected)
-  }
-
   getParent (): Select | null {
     let parent = this.$parent
     while (parent) {
